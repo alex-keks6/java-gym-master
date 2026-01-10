@@ -31,4 +31,33 @@ public class Timetable {
         return timetable.get(dayOfWeek).getOrDefault(timeOfDay, new ArrayList<>());
     }
 
+    // Нужна ли в этом методе внутри циклов проверка на null или пустоту на случай
+    // если ни одной тренировки не добавлено? Написанный тест показывает, что и без этого метод корректно отрабатывает,
+    // но всё же есть сомнения, так как в таком случае не инициализированы явно внутренние структуры
+
+    // Также ещё один вопрос: почему для тестов для данного метода необходимо переопределить equals и hashCode
+    // для CounterOfTrainings, иначе тесты будут падать, а для предыдущих функций для TrainingSession всё и так
+    // работает?
+    public List<CounterOfTrainings> getCountByCoaches() {
+        ArrayList<CounterOfTrainings> sortedCountByCoaches = new ArrayList<>();
+        Map<Coach, Integer> countByCoaches = new HashMap<>();
+
+        for (TreeMap<TimeOfDay, ArrayList<TrainingSession>> dayOfWeekSessions : timetable.values()) {
+            for (ArrayList<TrainingSession> timeOfDaySessions : dayOfWeekSessions.values()) {
+                for (TrainingSession trainingSession : timeOfDaySessions) {
+                    countByCoaches.put(trainingSession.getCoach(),
+                            countByCoaches.getOrDefault(trainingSession.getCoach(), 0) + 1);
+                }
+            }
+        }
+
+        for (Coach coach : countByCoaches.keySet()) {
+            sortedCountByCoaches.add(new CounterOfTrainings(coach, countByCoaches.get(coach)));
+        }
+
+        CounterOfTrainingsComparator counterOfTrainingsComparator = new CounterOfTrainingsComparator();
+        sortedCountByCoaches.sort(counterOfTrainingsComparator);
+
+        return sortedCountByCoaches;
+    }
 }
