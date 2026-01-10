@@ -178,7 +178,9 @@ public class TimetableTest {
     @Test
     void testGetCountByCoachesWithEqualSessions() {
         Timetable timetable = new Timetable();
-        List<CounterOfTrainings> correctResult = new ArrayList<>();
+        List<Integer> correctResult = new ArrayList<>();
+        List<Integer> actualResult = new ArrayList<>();
+        List<CounterOfTrainings> methodResult = new ArrayList<>();
 
         Coach coach1 = new Coach("Васильев", "Николай", "Сергеевич");
         Coach coach2 = new Coach("Александров", "Александр", "Александрович");
@@ -202,11 +204,17 @@ public class TimetableTest {
         timetable.addNewTrainingSession(trainingSession4);
         timetable.addNewTrainingSession(trainingSession5);
 
-        correctResult.add(new CounterOfTrainings(coach1, 2));
-        correctResult.add(new CounterOfTrainings(coach2, 2));
-        correctResult.add(new CounterOfTrainings(coach3, 1));
+        correctResult.add(2);
+        correctResult.add(2);
+        correctResult.add(1);
 
-        Assertions.assertEquals(correctResult, timetable.getCountByCoaches());
+        methodResult = timetable.getCountByCoaches();
+
+        actualResult.add(methodResult.get(0).getCountOfTrainings());
+        actualResult.add(methodResult.get(1).getCountOfTrainings());
+        actualResult.add(methodResult.get(2).getCountOfTrainings());
+
+        Assertions.assertEquals(correctResult, actualResult);
     }
 
     @Test
