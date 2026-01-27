@@ -55,8 +55,7 @@ public class Timetable {
             sortedCountByCoaches.add(new CounterOfTrainings(coach, countByCoaches.get(coach)));
         }
 
-        CounterOfTrainingsComparator counterOfTrainingsComparator = new CounterOfTrainingsComparator();
-        sortedCountByCoaches.sort(counterOfTrainingsComparator);
+        Collections.sort(sortedCountByCoaches);
 
         return sortedCountByCoaches;
     }

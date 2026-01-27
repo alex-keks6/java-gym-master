@@ -12,6 +12,7 @@ target/
 *.iws
 *.iml
 *.ipr
+java-gym-master.iml
 
 ### Eclipse ###
 .apt_generated

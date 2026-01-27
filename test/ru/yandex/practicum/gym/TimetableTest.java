@@ -1,20 +1,30 @@
 package ru.yandex.practicum.gym;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 public class TimetableTest {
 
+    Timetable timetable;
+    Coach coach;
+    Group groupChild, groupAdult;
+
+    @BeforeEach
+    void initTimetable() {
+        timetable = new Timetable();
+        coach = new Coach("Васильев", "Николай", "Сергеевич");
+        groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+    }
+
     @Test
     void testGetTrainingSessionsForDaySingleSession() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultMonday = new ArrayList<>();
 
-        Group group = new Group("Акробатика для детей", Age.CHILD, 60);
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-        TrainingSession singleTrainingSession = new TrainingSession(group, coach,
+        TrainingSession singleTrainingSession = new TrainingSession(groupChild, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
 
         timetable.addNewTrainingSession(singleTrainingSession);
@@ -30,13 +40,9 @@ public class TimetableTest {
 
     @Test
     void testGetTrainingSessionsForDayMultipleSessions() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultMonday = new ArrayList<>();
         ArrayList<TrainingSession> correctResultThursday = new ArrayList<>();
 
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
 
@@ -68,12 +74,9 @@ public class TimetableTest {
 
     @Test
     void testGetTrainingSessionsForDayAndTimeSingleSession() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultMonday = new ArrayList<>();
 
-        Group group = new Group("Акробатика для детей", Age.CHILD, 60);
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-        TrainingSession singleTrainingSession = new TrainingSession(group, coach,
+        TrainingSession singleTrainingSession = new TrainingSession(groupChild, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
 
         timetable.addNewTrainingSession(singleTrainingSession);
@@ -90,12 +93,8 @@ public class TimetableTest {
 
     @Test
     void testGetTrainingSessionsForDayAndTimeMultipleSessionsAtOneTime() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultThursday = new ArrayList<>();
 
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
 
@@ -117,13 +116,9 @@ public class TimetableTest {
 
     @Test
     void testGetTrainingSessionsForDayAndTimeMultipleSessionsAtDifferentDay() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultThursday = new ArrayList<>();
         ArrayList<TrainingSession> correctResultMonday = new ArrayList<>();
 
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
 
@@ -147,13 +142,9 @@ public class TimetableTest {
 
     @Test
     void testGetTrainingSessionsForDayAndTimeMultipleSessionsAtDifferentDayAndTime() {
-        Timetable timetable = new Timetable();
         ArrayList<TrainingSession> correctResultThursday = new ArrayList<>();
         ArrayList<TrainingSession> correctResultMonday = new ArrayList<>();
 
-        Coach coach = new Coach("Васильев", "Николай", "Сергеевич");
-
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
 
@@ -177,19 +168,16 @@ public class TimetableTest {
 
     @Test
     void testGetCountByCoachesWithEqualSessions() {
-        Timetable timetable = new Timetable();
         List<Integer> correctResult = new ArrayList<>();
         List<Integer> actualResult = new ArrayList<>();
-        List<CounterOfTrainings> methodResult = new ArrayList<>();
+        List<CounterOfTrainings> methodResult;
 
-        Coach coach1 = new Coach("Васильев", "Николай", "Сергеевич");
         Coach coach2 = new Coach("Александров", "Александр", "Александрович");
         Coach coach3 = new Coach("Иванов", "Иван", "Иванович");
 
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
-        TrainingSession trainingSession1 = new TrainingSession(groupAdult, coach1,
+        TrainingSession trainingSession1 = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
-        TrainingSession trainingSession2 = new TrainingSession(groupAdult, coach1,
+        TrainingSession trainingSession2 = new TrainingSession(groupAdult, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(14, 0));
         TrainingSession trainingSession3 = new TrainingSession(groupAdult, coach2,
                 DayOfWeek.FRIDAY, new TimeOfDay(13, 0));
@@ -219,27 +207,22 @@ public class TimetableTest {
 
     @Test
     void testGetCountByCoachesNoSessions() {
-        Timetable timetable = new Timetable();
-
         //Проверить, что вернулся пустой массив, так как занятий не было
         Assertions.assertEquals(new ArrayList<>(), timetable.getCountByCoaches());
     }
 
     @Test
     void testGetCountByCoachesWithDifferentSessions() {
-        Timetable timetable = new Timetable();
         List<CounterOfTrainings> correctResult = new ArrayList<>();
 
-        Coach coach1 = new Coach("Васильев", "Николай", "Сергеевич");
         Coach coach2 = new Coach("Александров", "Александр", "Александрович");
         Coach coach3 = new Coach("Иванов", "Иван", "Иванович");
 
-        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
-        TrainingSession trainingSession1 = new TrainingSession(groupAdult, coach1,
+        TrainingSession trainingSession1 = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
-        TrainingSession trainingSession2 = new TrainingSession(groupAdult, coach1,
+        TrainingSession trainingSession2 = new TrainingSession(groupAdult, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(14, 0));
-        TrainingSession trainingSession3 = new TrainingSession(groupAdult, coach1,
+        TrainingSession trainingSession3 = new TrainingSession(groupAdult, coach,
                 DayOfWeek.FRIDAY, new TimeOfDay(13, 0));
         TrainingSession trainingSession4 = new TrainingSession(groupAdult, coach2,
                 DayOfWeek.TUESDAY, new TimeOfDay(18, 0));
@@ -255,7 +238,7 @@ public class TimetableTest {
         timetable.addNewTrainingSession(trainingSession5);
         timetable.addNewTrainingSession(trainingSession6);
 
-        correctResult.add(new CounterOfTrainings(coach1, 3));
+        correctResult.add(new CounterOfTrainings(coach, 3));
         correctResult.add(new CounterOfTrainings(coach2, 2));
         correctResult.add(new CounterOfTrainings(coach3, 1));
 
