@@ -10,9 +10,8 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 *.iws
-*.iml
 *.ipr
-java-gym-master.iml
+*.iml
 
 ### Eclipse ###
 .apt_generated
